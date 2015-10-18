@@ -1,7 +1,10 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
-    postcss = require('gulp-postcss');
+    postcss = require('gulp-postcss'),
+    autoprefixer = require('autoprefixer'),
+    cssnext = require('cssnext'),
+    precss = require('precss');
 
 /*
     Gulp has 4 top level functions:
@@ -25,7 +28,11 @@ gulp.task('watch', function() {
 });
 
 gulp.task('css', function() {
-    var processors = [];
+    var processors = [
+        autoprefixer,
+        cssnext,
+        precss
+    ];
 
     return gulp.src('src/stylesheets/**/*.css')
         .pipe(postcss(processors))
