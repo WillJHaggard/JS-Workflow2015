@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
-    jshint = require('gulp-jshint');
+    jshint = require('gulp-jshint'),
+    postcss = require('gulp-postcss');
 
 /*
     Gulp has 4 top level functions:
@@ -11,7 +12,7 @@ var gulp = require('gulp'),
 */
 
 // What a gulp task looks like with gutil
-gulp.task('default', ['watch']);
+gulp.task('default', ['watch']); // this means "gulp" will now run watch
 
 gulp.task('lint', function() {
     return gulp.src('src/javascript/**/*.js')
@@ -19,3 +20,6 @@ gulp.task('lint', function() {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
+gulp.task('watch', function() {
+    gulp.watch('src/javascript/**/*.js', ['jshint']);
+});
