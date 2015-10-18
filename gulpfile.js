@@ -6,7 +6,8 @@ var gulp = require('gulp'),
     cssnext = require('cssnext'),
     precss = require('precss'),
     sourcemaps = require('gulp-sourcemaps'),
-    lost = require('lost');
+    lost = require('lost'),
+    browserSync = require('browser-sync');
 
 /*
     Gulp has 4 top level functions:
@@ -25,10 +26,25 @@ gulp.task('lint', function() {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('watch', function() {
-    gulp.watch('src/javascript/**/*.js', ['jshint']);
+gulp.task('watch', ['browserSync', 'css', 'lint'], function() {
+    gulp.watch('src/javascript/**/*.js', ['lint']);
+    gulp.watch('src/stylesheets/**/*.css', ['css']);
 });
 
+// live-reload with browser-sync
+gulp.task('browserSync', function(){
+    browserSync({
+        server: {
+            baseDir: './'
+        },
+        port: 8080,
+        open: true,
+        notify: false
+    })
+});
+
+
+// postcss task
 gulp.task('css', function() {
     var processors = [
         autoprefixer,
@@ -41,5 +57,8 @@ gulp.task('css', function() {
         .pipe(sourcemaps.init())
         .pipe(postcss(processors))
         .pipe(sourcemaps.write('././public/assets/stylesheets'))
-        .pipe(gulp.dest('././public/assets/stylesheets'));
+        .pipe(gulp.dest('././public/assets/stylesheets'))
+        .pipe(browserSync.reload({
+            stream: true
+        }))
 });
