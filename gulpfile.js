@@ -23,3 +23,11 @@ gulp.task('lint', function() {
 gulp.task('watch', function() {
     gulp.watch('src/javascript/**/*.js', ['jshint']);
 });
+
+gulp.task('css', function() {
+    var processors = [];
+
+    return gulp.src('src/stylesheets/**/*.css')
+        .pipe(postcss(processors))
+        .pipe(gulp.dest('././public/assets/stylesheets'));
+});
