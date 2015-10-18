@@ -4,7 +4,9 @@ var gulp = require('gulp'),
     postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
     cssnext = require('cssnext'),
-    precss = require('precss');
+    precss = require('precss'),
+    sourcemaps = require('gulp-sourcemaps'),
+    lost = require('lost');
 
 /*
     Gulp has 4 top level functions:
@@ -31,10 +33,13 @@ gulp.task('css', function() {
     var processors = [
         autoprefixer,
         cssnext,
-        precss
+        precss,
+        lost
     ];
 
     return gulp.src('src/stylesheets/**/*.css')
+        .pipe(sourcemaps.init())
         .pipe(postcss(processors))
+        .pipe(sourcemaps.write('././public/assets/stylesheets'))
         .pipe(gulp.dest('././public/assets/stylesheets'));
 });

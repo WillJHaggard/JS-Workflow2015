@@ -18,3 +18,7 @@
     background: blue;
  }
 }
+/* Testing Lost */
+div {
+    lost-column: 1/3;
+}
