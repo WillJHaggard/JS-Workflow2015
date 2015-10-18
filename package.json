@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/WillJHaggard/JS-Workflow2015#readme",
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.6"
   }
 }
