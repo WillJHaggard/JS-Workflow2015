@@ -19,6 +19,13 @@ var postcss = require('gulp-postcss'),
     precss = require('precss'),
     sourcemaps = require('gulp-sourcemaps'),
     lost = require('lost');
+    // postcss processor array
+var processors = [
+    autoprefixer,
+    cssnext,
+    precss,
+    lost
+];
 /*
     Gulp has 4 top level functions:
         gulp.task - defines your tasks; arguments are (name, deps, fn)
@@ -64,7 +71,7 @@ gulp.task('styles', function() {
                  gutil.log(error.message);
                  this.emit('end');
             }}))
-        //postcss stuff goes here
+        .pipe(postcss(processors))
         .pipe(gulp.dest('dist/styles/'))
         .pipe(browserSync.reload({ stream: true }));
 });
@@ -78,7 +85,7 @@ gulp.task('scripts', function() {
                 this.emit('end');
             }}))
         .pipe(jshint())
-        .pipe(jshint.reporter('stylish'))
+        .pipe(jshint.reporter('jshint-stylish'))
         .pipe(concat('main.js'))
         .pipe(babel())
         .pipe(gulp.dest('dist/scripts/'))
