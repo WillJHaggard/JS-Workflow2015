@@ -27,10 +27,77 @@ var postcss = require('gulp-postcss'),
         gulp.watch - two forms; return an EventEmitter that emits change events; (glob, optional options object, array of tasks)
 */
 
-// What a gulp task looks like with gutil
-gulp.task('default', function() {
+// default run task for watching
+gulp.task('default', ['browser-sync'], function() {
+    gulp.watch('src/styles/**/*.css', ['styles']);
+    gulp.watch('src/scripts/**/*.js', ['scripts']);
+    gulp.watch("*.html", ['bs-reload']);
     gutil.log('YO');
 });
+
+
+// browser-sync
+gulp.task('browser-sync', function() {
+    browserSync({
+        server: {
+            baseDir: "./"
+        }
+    })
+});
+
+gulp.task('bs-reload', function() {
+    browserSync.reload();
+});
+
+// image tasks
+gulp.task('images', function() {
+    gulp.src('src/images/**/*')
+        .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true  })))
+        .pipe(gulp.dest('dist/images/'));
+});
+
+// styles with postcss
+gulp.task('styles', function() {
+    gulp.src(['src/styles/**/*.css'])
+        .pipe(plumber({
+            errorHandler: function (error) {
+                 gutil.log(error.message);
+                 this.emit('end');
+            }}))
+        //postcss stuff goes here
+        .pipe(gulp.dest('dist/styles/'))
+        .pipe(browserSync.reload({ stream: true }));
+});
+
+// scripts tasks
+gulp.task('scripts', function() {
+    return gulp.src('src/scripts/**/*.js')
+        .pipe(plumber({
+            errorHandler: function (error) {
+                gutil.log(error.message);
+                this.emit('end');
+            }}))
+        .pipe(jshint())
+        .pipe(jshint.reporter('stylish'))
+        .pipe(concat('main.js'))
+        .pipe(babel())
+        .pipe(gulp.dest('dist/scripts/'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
+        .pipe(gulp.dest('dist/scripts/'))
+        .pipe(browserSync.reload({ stream: true  }));
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
