@@ -1,14 +1,24 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
-    jshint = require('gulp-jshint'),
-    postcss = require('gulp-postcss'),
+    plumber = require('gulp-plumber'),
+    rename = require('gulp-rename');
+// js plugins
+var babel = require('gulp-babel');
+var jshint = require('gulp-jshint');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+// image plugins
+var imagemin = require('gulp-imagemin'),
+    cache = require('gulp-cache');
+// live-reload/server
+var browserSync = require('browser-sync');
+    // postcss containers
+var postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
     cssnext = require('cssnext'),
     precss = require('precss'),
     sourcemaps = require('gulp-sourcemaps'),
-    lost = require('lost'),
-    browserSync = require('browser-sync');
-
+    lost = require('lost');
 /*
     Gulp has 4 top level functions:
         gulp.task - defines your tasks; arguments are (name, deps, fn)
@@ -18,47 +28,12 @@ var gulp = require('gulp'),
 */
 
 // What a gulp task looks like with gutil
-gulp.task('default', ['watch']); // this means "gulp" will now run watch
-
-gulp.task('lint', function() {
-    return gulp.src('src/javascript/**/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
-});
-
-gulp.task('watch', ['browserSync', 'css', 'lint'], function() {
-    gulp.watch('src/javascript/**/*.js', ['lint']);
-    gulp.watch('src/stylesheets/**/*.css', ['css']);
-});
-
-// live-reload with browser-sync
-gulp.task('browserSync', function(){
-    browserSync({
-        server: {
-            baseDir: './'
-        },
-        port: 8080,
-        open: true,
-        notify: false
-    })
+gulp.task('default', function() {
+    gutil.log('YO');
 });
 
 
-// postcss task
-gulp.task('css', function() {
-    var processors = [
-        autoprefixer,
-        cssnext,
-        precss,
-        lost
-    ];
 
-    return gulp.src('src/stylesheets/**/*.css')
-        .pipe(sourcemaps.init())
-        .pipe(postcss(processors))
-        .pipe(sourcemaps.write('././public/assets/stylesheets'))
-        .pipe(gulp.dest('././public/assets/stylesheets'))
-        .pipe(browserSync.reload({
-            stream: true
-        }))
-});
+
+
+
